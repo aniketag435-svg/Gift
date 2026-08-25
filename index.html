@@ -82,13 +82,23 @@ h1{font-size:2.2rem}.cat{font-size:70px;animation:b 2s infinite}@keyframes b{50%
 </div>
 
 <script>
-const PASSWORD="riya",BIRTHDAY="2026-09-07T00:00:00";
+const PASSWORD="riya";
+const BIRTHDAY="2026-09-07T00:00:00";
+
+const loginBox=document.getElementById("login");
+const home=document.getElementById("home");
+const pass=document.getElementById("pass");
+const error=document.getElementById("error");
+const countdown=document.getElementById("countdown");
+const birthday=document.getElementById("birthday");
+const gifts=document.getElementById("gifts");
+const content=document.getElementById("content");
 
 const surprises=[
  ["📸","Polaroid","photo"],
- ["🌻","Sunflowers","flowers"],
+ ["🌻","Bouquets","flowers"],
  ["💌","Birthday Wish","letter"],
- ["🎵","Our Song","music"]
+ ["🍬","A Little Treat 🎵","music"]
 ];
 
 gifts.innerHTML=surprises.map(x=>
@@ -96,47 +106,58 @@ gifts.innerHTML=surprises.map(x=>
 ).join("");
 
 function unlock(){
- if(pass.value.toLowerCase().trim()==PASSWORD){
-  login.classList.remove("active");
-  home.classList.add("active");
-  timer();
- }else error.innerText="Wrong code! Try again 💛";
+ const entered=pass.value.trim().toLowerCase();
+
+ if(entered===PASSWORD){
+   loginBox.classList.remove("active");
+   home.classList.add("active");
+   startTimer();
+ }else{
+   error.textContent="Wrong code! Try again 💛";
+ }
 }
 
-function timer(){
- function run(){
-  let x=new Date(BIRTHDAY)-new Date();
-  if(x<=0){
-   countdown.innerHTML="🎂🎉 IT'S RIYA'S BIRTHDAY! 🎉🎂";
-   birthday.style.display="block";
-   return;
-  }
-  let d=Math.floor(x/864e5),h=Math.floor(x%864e5/36e5),
-      m=Math.floor(x%36e5/6e4),s=Math.floor(x%6e4/1e3);
-  countdown.innerHTML=`🎂 ${d}d ${h}h ${m}m ${s}s
-  <small style="display:block">Until 7 September 2026 🌻</small>`;
+function startTimer(){
+ function update(){
+   const diff=new Date(BIRTHDAY)-new Date();
+
+   if(diff<=0){
+     countdown.innerHTML="🎂🎉 IT'S SONI JIIII'S BIRTHDAY! 🎉🎂";
+     birthday.style.display="block";
+     return;
+   }
+
+   const d=Math.floor(diff/86400000);
+   const h=Math.floor(diff%86400000/3600000);
+   const m=Math.floor(diff%3600000/60000);
+   const s=Math.floor(diff%60000/1000);
+
+   countdown.innerHTML=
+   `🎂 ${d}d ${h}h ${m}m ${s}s
+   <small style="display:block">
+   Until 7 September 2026 🌻
+   </small>`;
  }
- run();setInterval(run,1000);
+
+ update();
+ setInterval(update,1000);
 }
 
 function show(type){
- let c=document.getElementById("content");
- c.style.display="block";
+ content.style.display="block";
 
- if(type=="photo")
-c.innerHTML=`
-<h2>📸 A Special Memory</h2>
+ if(type==="photo"){
+  content.innerHTML=`
+   <h2>📸 A Special Memory</h2>
+   <div class="polaroid">
+    <img src="riya.png" alt="Soni Jiiii">
+    <p>🌻 A beautiful memory</p>
+   </div>
+   <p>Some memories are worth keeping forever ❤️</p>`;
+ }
 
-<div class="polaroid">
-  <img src="riya.png" alt="Soni Jiiii">
-  <p>🌻 A beautiful memory</p>
-</div>
-
-<p>Some memories are worth keeping forever ❤️</p>
-`;
-
- if(type=="flowers"){
-  let flowers=[
+ if(type==="flowers"){
+  const flowers=[
    ["bouquet1..png","🌻 Golden Sunshine"],
    ["bouquet2..png","🌹 Sunflower & Roses"],
    ["bouquet3..png","💐 Beautiful Blooms"],
@@ -144,31 +165,43 @@ c.innerHTML=`
    ["bouquet5..png","🌷 Colourful Flowers"],
    ["bouquet6..png","💛 Birthday Bouquet"]
   ];
-  c.innerHTML=`<h2>🌻 Bouquets for Riya 🌻</h2>
-  <p>A whole collection of beautiful flowers just for you! 💛</p>
-  <div class="bouquets">${flowers.map(f=>
-   `<div class="bouquet"><img src="${f[0]}"><b>${f[1]}</b></div>`
-  ).join("")}</div>
-  <p><b>🌻 May your life always be bright and beautiful!</b></p>`;
+
+  content.innerHTML=`
+   <h2>🌻 Bouquets for Soni Jiiii 🌻</h2>
+   <p>A whole collection of beautiful flowers just for you! 💛</p>
+   <div class="bouquets">
+    ${flowers.map(f=>`
+     <div class="bouquet">
+      <img src="${f[0]}" alt="Flower bouquet">
+      <b>${f[1]}</b>
+     </div>
+    `).join("")}
+   </div>
+   <p><b>🌻 May your life always be bright and beautiful!</b></p>`;
  }
 
- if(type=="letter")
- c.innerHTML=`<h2>💌 Birthday Wish for soni jiii</h2>
- <p>Dear soni jiii,</p>
- <p>Wishing you a very Happy Birthday! 🎂🥳</p>
- <p>May this new year bring you happiness, success, laughter and beautiful memories.</p>
- <p>Keep smiling, keep shining and achieve everything you wish for. ✨</p>
- <p>Have an amazing birthday and a wonderful year ahead!</p>
- <p><b>Happy Birthday, soni jiii! 🌻🎂🥳</b></p>`;
+ if(type==="letter"){
+  content.innerHTML=`
+   <h2>💌 Birthday Wish for Soni Jiiii</h2>
+   <p>Dear Soni Jiiii,</p>
+   <p>Wishing you a very Happy Birthday! 🎂🥳</p>
+   <p>May this new year bring you lots of happiness, success, laughter and beautiful memories.</p>
+   <p>Keep smiling, keep shining and achieve everything you wish for. ✨</p>
+   <p>Have an amazing birthday and a wonderful year ahead!</p>
+   <p><b>Happy Birthday, Soni Jiiii! 🌻🎂🥳</b></p>`;
+ }
 
- if(type=="music")
- c.innerHTML=`<h2>🎵 A Song for Riya</h2>
- <p>Enjoy this little musical surprise! 🎶</p>
-<audio controls> <source src="birthday-song.mpeg" type="audio/mpeg">
-</audio>
-  
+ if(type==="music"){
+  content.innerHTML=`
+   <h2>🍬 A Little Treat 🎵</h2>
+   <p>Because life is better with little treats! 💛</p>
+   <p>Here's a little musical treat just for you. 🎶</p>
+   <audio controls>
+    <source src="birthday-song.mpeg" type="audio/mpeg">
+   </audio>`;
+ }
 
- c.scrollIntoView({behavior:"smooth"});
+ content.scrollIntoView({behavior:"smooth"});
 }
 </script>
 
